@@ -13,11 +13,14 @@ const user_sechema = new mongoose.Schema({
         type : String,
         unique : true,
         required : true,
-        validate : [validator.isEmail , 'filed must be a vaild email']
+        validate : [validator.isEmail , 'faild must be a vaild email']
     },
     password:{
         type : String,
         required : true,
+    },
+    token:{
+        type : String
     }
 
 })
