@@ -5,10 +5,12 @@ const router=express.Router();
 const courseController=require('../controller/courses.controller');
 
 const validation = require('../middleware/validation-schema');
+const { version } = require('mongoose');
+const verify_token = require('../middleware/verifyToken');
 
 router.route('/')
-    .get(courseController.getAllCourses)
-    .post(validation.validation_course(),courseController.addCourse);
+    .get(verify_token,courseController.getAllCourses)
+    .post,(verify_token,validation.validation_course(),courseController.addCourse);
 
 router.route('/:course_name')
     .get(courseController.getSingleCourse)
