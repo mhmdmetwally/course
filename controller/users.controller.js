@@ -22,7 +22,7 @@ const getAllusers = AsyncWrapper
 const register = AsyncWrapper
 (
     async(req,res,next)=>{
-        const {firstName,lastName,email,password} = req.body;
+        const {firstName,lastName,email,password,role} = req.body;
          const err=validationResult(req);
         if(!err.isEmpty()){
             const error = new app_error();
@@ -42,13 +42,15 @@ const register = AsyncWrapper
             firstName,
             lastName,
             email,
-            password:hashed_password
+            password:hashed_password,
+            role
         });
         
         //gen token
         const payload={
             email:user.email,
-            id:user._id
+            id:user._id,
+            role:user.role
         };
         const token = await gen_token(payload);
         user.token=token;
@@ -77,13 +79,15 @@ const login = AsyncWrapper
         {
             const payload={
                 email:user.email,
-                id:user._id
+                id:user._id,
+                role:user.role
             };
             user.token = await gen_token(payload);
-            console.log(user.token);
             return res.json({
                 status:http_status_text.SUCCESS,
-                data:{token:user.token}
+                data:{
+                    token:user.token,
+                }
             })
         }
         else{

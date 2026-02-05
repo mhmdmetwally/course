@@ -14,6 +14,7 @@ const verify_token=(req,res,next)=>{
     const token = auth_header.split(' ')[1];
     try {
         const decoded_token= jwt.verify(token,JWT_SECRET);    
+        req.user=decoded_token.payload;
         next();
     } catch (error) {
         const err=new app_error();

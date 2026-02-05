@@ -94,7 +94,6 @@ const deleteCourse =AsyncWrapper(
    async (req, res,next) => {
     let course_name = req.params.course_name;
 
-    console.log("Deleting:", course_name);
 
     // Escape special characters
     const safeName = escapeRegex(course_name);
