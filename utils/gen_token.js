@@ -6,9 +6,7 @@ module.exports = async(payload)=>{
         payload
         },
         JWT_SECRET,
-        {
-            expiresIn:'1m'
-        }
+        {expiresIn:'1m'}
     );
     return token;
 }

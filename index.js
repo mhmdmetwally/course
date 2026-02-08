@@ -5,6 +5,7 @@ const mongoose = require ('mongoose');
 const url=process.env.MONGO_URL
 const http_status_text=require('./utils/http_status_text');
 const cors=require('cors');
+const path = require('path');
 
 mongoose.connect(url).then(()=>{
     console.log('mongodb server start');
@@ -15,6 +16,10 @@ const app=express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use('/uploads',express.static(
+    path.join(__dirname,'uploads')
+));
 
 const coursesRouter = require('./routes/courses.route');
 const usersRouter = require('./routes/users.route');

@@ -43,14 +43,15 @@ const register = AsyncWrapper
             lastName,
             email,
             password:hashed_password,
-            role
+            role,
+            avatar:req.file.filename
         });
         
         //gen token
         const payload={
             email:user.email,
             id:user._id,
-            role:user.role
+            role:user.role,
         };
         const token = await gen_token(payload);
         user.token=token;

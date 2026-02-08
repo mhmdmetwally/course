@@ -4,7 +4,6 @@ module.exports =(...allowedroles)=>{
     
     return (req,res,next)=>{
          const cur_role = req.user.role;
-        console.log(cur_role);
         if (allowedroles.includes(cur_role)) {
             return next();
         }
