@@ -1,0 +1,227 @@
+openapi: 3.0.1
+info:
+    title: "Course API"
+    descreption: "api course"
+    version: "1.0.0"
+
+servers:
+  - url: "http://localhost:5000"
+    descreption : "Local Dev Server"
+
+paths:
+  /courses:
+    get:
+      summary: "get all courses"
+      tags: [Courses]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: "Page number"
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: "Number of courses per page"
+      responses:
+        '200':
+          description: "List of courses"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "SUCCESS"
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+
+
+    post:
+      summary : "add new course"
+      tags: [Courses]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+      responses:
+        '201':
+          descreption: "created"
+        '403':
+          description: Forbidden - Admin And Manager only 
+
+  /courses/{id}:
+    get:
+      summary: "get one course"
+      tags: [Courses]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: "path"
+          name: "id"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          descreption: "success"
+
+    put:
+      summary: "update course"
+      tags: [Courses]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: "path"
+          name: "id"
+          required: true
+          schema:
+            type: "string"
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: '#components/schemas/Course'
+      responses:
+        '200':
+          descreption: "updated"
+        '403':
+          description: Forbidden - Admin And Manager only 
+
+    delete:
+      summary: "delete Course"
+      tags: [Courses]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: "path"
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          descreption: "delete Course"
+        '403':
+          description: Forbidden - Admin And Manager only 
+
+  /users:
+    get:
+      summary: "get all users"
+      tags: [Users]
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: "Page number"
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: "Number of users per page"
+      responses:
+        '200':
+          description: "List of users"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "SUCCESS"
+                  data:
+                    type: object
+                    properties:
+                      users:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/User'
+
+
+  /users/register:
+    post:
+      summary: "register new user"
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Register'
+      responses:
+        '201':
+          descreption: "user created successfully"
+
+  /users/login:
+    post: 
+      summary: "Login User"
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '200':
+          descreption: "Login successful"
+
+
+components:
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+
+    Register:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName: 
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+        avatar:
+          type: string
+          format: binary
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password

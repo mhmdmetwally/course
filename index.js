@@ -29,6 +29,10 @@ const { error } = require("console");
 app.use('/courses',coursesRouter);
 
 app.use('/users',usersRouter);
+//swagger
+const swagger_doc=require('./swagger/swagger_doc');
+swagger_doc(app);
+
 
 app.use((req, res) => {
   res.status(404).json({
